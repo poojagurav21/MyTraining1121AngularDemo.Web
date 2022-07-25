@@ -63,6 +63,8 @@ namespace MyTraining1121AngularDemo
             configuration.CreateMap<Customer, CustomerListDto>();
             configuration.CreateMap<CreateCustomerInput, Customer>();
             configuration.CreateMap<Customer, GetCustomerForEditOutput>();
+            configuration.CreateMap<CustomerUsers, UserInCustomerListDto>();
+            configuration.CreateMap<AddUserInput, User>();
 
 
             //Inputs

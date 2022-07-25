@@ -3,7 +3,9 @@ using Abp.Authorization;
 using Abp.Collections.Extensions;
 using Abp.Domain.Repositories;
 using Abp.Extensions;
+using Microsoft.EntityFrameworkCore;
 using MyTraining1121AngularDemo.Authorization;
+using MyTraining1121AngularDemo.Authorization.Users;
 using MyTraining1121AngularDemo.CustomerMgt;
 using System;
 using System.Collections.Generic;
@@ -17,7 +19,7 @@ namespace MyTraining1121AngularDemo
     public class CustomerAppService : MyTraining1121AngularDemoAppServiceBase, ICustomerAppService
     {
         private readonly IRepository<Customer> _customerRepository;
-
+        private readonly IRepository<User, long> _userRepository;
         public CustomerAppService(IRepository<Customer> customerRepository)
         {
             _customerRepository = customerRepository;
@@ -27,6 +29,7 @@ namespace MyTraining1121AngularDemo
         {
             var customer = _customerRepository
                 .GetAll()
+                .Include(p => p.CustomerUsers)
                 .WhereIf(
                     !input.Filter.IsNullOrEmpty(),
                     p => p.CustomerName.Contains(input.Filter) ||
@@ -66,6 +69,26 @@ namespace MyTraining1121AngularDemo
             customer.RegistrationDate=input.RegistrationDate;
             customer.Address=input.Address;
             await _customerRepository.UpdateAsync(customer);
+        }
+        [AbpAuthorize(AppPermissions.Pages_Tenant_Customer_EditCustomer)]
+        public async Task DeleteUser(EntityDto<long> input)
+        {
+            await _userRepository.DeleteAsync(input.Id);
+        }
+
+        [AbpAuthorize(AppPermissions.Pages_Tenant_Customer_EditCustomer)]
+        public async Task<UserInCustomerListDto> AddUser(AddUserInput input)
+        {
+            var customer = _customerRepository.Get(input.CustomerId);
+            await _customerRepository.EnsureCollectionLoadedAsync(customer, p => p.CustomerUsers);
+
+            var user = ObjectMapper.Map<CustomerUsers>(input);
+            customer.CustomerUsers.Add(user);
+
+            //Get auto increment Id of the new Phone by saving to database
+            await CurrentUnitOfWork.SaveChangesAsync();
+
+            return ObjectMapper.Map<UserInCustomerListDto>(user);
         }
 
     }

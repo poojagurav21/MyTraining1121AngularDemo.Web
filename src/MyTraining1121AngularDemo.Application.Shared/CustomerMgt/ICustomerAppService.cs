@@ -11,6 +11,8 @@ namespace MyTraining1121AngularDemo.CustomerMgt
         ListResultDto<CustomerListDto> GetCustomer(GetCustomerInput input);
         Task CreateCustomer(CreateCustomerInput input);
         Task DeleteCustomer(EntityDto input);
+        Task DeleteUser(EntityDto<long> input);
+        Task<UserInCustomerListDto> AddUser(AddUserInput input);
 
     }
 }
