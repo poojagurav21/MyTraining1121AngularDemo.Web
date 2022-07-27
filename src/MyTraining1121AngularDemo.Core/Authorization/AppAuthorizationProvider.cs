@@ -117,6 +117,7 @@ namespace MyTraining1121AngularDemo.Authorization
             customer.CreateChildPermission(AppPermissions.Pages_Tenant_Customer_CreateCustomer, L("CreateNewCustomer"), multiTenancySides: MultiTenancySides.Tenant);
             customer.CreateChildPermission(AppPermissions.Pages_Tenant_Customer_DeleteCustomer, L("DeleteCustomer"), multiTenancySides: MultiTenancySides.Tenant);
             customer.CreateChildPermission(AppPermissions.Pages_Tenant_Customer_EditCustomer,L("EditCustomer"),multiTenancySides: MultiTenancySides.Tenant);
+            customer.CreateChildPermission(AppPermissions.Pages_Tenant_Customer_GetUser, L("GetUser"), multiTenancySides: MultiTenancySides.Tenant);
             //HOST-SPECIFIC PERMISSIONS
 
             var editions = pages.CreateChildPermission(AppPermissions.Pages_Editions, L("Editions"), multiTenancySides: MultiTenancySides.Host);

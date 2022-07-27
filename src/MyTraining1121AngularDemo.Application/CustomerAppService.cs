@@ -19,10 +19,13 @@ namespace MyTraining1121AngularDemo
     public class CustomerAppService : MyTraining1121AngularDemoAppServiceBase, ICustomerAppService
     {
         private readonly IRepository<Customer> _customerRepository;
+        private readonly IRepository<CustomerUsers, long> _customerUserRepository;
         private readonly IRepository<User, long> _userRepository;
-        public CustomerAppService(IRepository<Customer> customerRepository)
+        public CustomerAppService(IRepository<Customer> customerRepository, IRepository<CustomerUsers, long> customerUserRepository, IRepository<User, long> userRepository)
         {
             _customerRepository = customerRepository;
+            _customerUserRepository = customerUserRepository;
+            _userRepository = userRepository;
         }
 
         public ListResultDto<CustomerListDto> GetCustomer(GetCustomerInput input)
@@ -33,11 +36,11 @@ namespace MyTraining1121AngularDemo
                 .WhereIf(
                     !input.Filter.IsNullOrEmpty(),
                     p => p.CustomerName.Contains(input.Filter) ||
-                        p.EmailAddress.Contains(input.Filter)||
+                        p.EmailAddress.Contains(input.Filter) ||
                         p.Address.Contains(input.Filter)
                 )
                 .OrderBy(p => p.CustomerName)
-                
+
                 .ToList();
 
             return new ListResultDto<CustomerListDto>(ObjectMapper.Map<List<CustomerListDto>>(customer));
@@ -46,7 +49,18 @@ namespace MyTraining1121AngularDemo
         public async Task CreateCustomer(CreateCustomerInput input)
         {
             var customer = ObjectMapper.Map<Customer>(input);
-            await _customerRepository.InsertAsync(customer);
+            await _customerRepository.InsertAndGetIdAsync(customer);
+            var allCustomer = await _customerRepository.GetAll().ToListAsync();
+            //List<Customer>cust=new List<Customer> { customer };
+
+            var lastCust = allCustomer.Last();
+            var u = lastCust.Id;
+            var customerId = u;
+            var c = input.UserRefId;
+            var userId = c;
+            var custmerUsers = new CustomerUsers { CustomerRefId = customerId, UserRefId = userId };
+            var s = custmerUsers;
+            await _customerUserRepository.InsertAsync(custmerUsers);
         }
         [AbpAuthorize(AppPermissions.Pages_Tenant_Customer_DeleteCustomer)]
         public async Task DeleteCustomer(EntityDto input)
@@ -66,31 +80,55 @@ namespace MyTraining1121AngularDemo
             var customer = await _customerRepository.GetAsync(input.Id);
             customer.CustomerName = input.CustomerName;
             customer.EmailAddress = input.EmailAddress;
-            customer.RegistrationDate=input.RegistrationDate;
-            customer.Address=input.Address;
+            customer.RegistrationDate = input.RegistrationDate;
+            customer.Address = input.Address;
+            //customer.UserRefId = input.UserRefId;
             await _customerRepository.UpdateAsync(customer);
         }
         [AbpAuthorize(AppPermissions.Pages_Tenant_Customer_EditCustomer)]
         public async Task DeleteUser(EntityDto<long> input)
         {
-            await _userRepository.DeleteAsync(input.Id);
+            await _customerUserRepository.DeleteAsync(input.Id);
         }
 
         [AbpAuthorize(AppPermissions.Pages_Tenant_Customer_EditCustomer)]
         public async Task<UserInCustomerListDto> AddUser(AddUserInput input)
         {
-            var customer = _customerRepository.Get(input.CustomerId);
-            await _customerRepository.EnsureCollectionLoadedAsync(customer, p => p.CustomerUsers);
 
-            var user = ObjectMapper.Map<CustomerUsers>(input);
-            customer.CustomerUsers.Add(user);
+            try
+            {
+                var customer = _customerRepository.Get(input.CustomerRefId);
+                await _customerRepository.EnsureCollectionLoadedAsync(customer, p => p.CustomerUsers);
 
-            //Get auto increment Id of the new Phone by saving to database
-            await CurrentUnitOfWork.SaveChangesAsync();
+                var user = ObjectMapper.Map<CustomerUsers>(input);
+                customer.CustomerUsers.Add(user);
 
-            return ObjectMapper.Map<UserInCustomerListDto>(user);
+                //Get auto increment Id of the new Phone by saving to database
+                await CurrentUnitOfWork.SaveChangesAsync();
+
+                return ObjectMapper.Map<UserInCustomerListDto>(user);
+            }
+            catch
+            {
+                return null;
+            }
         }
+        [AbpAuthorize(AppPermissions.Pages_Tenant_Customer_GetUser)]
+        public ListResultDto<User> GetUser(GetUserInput input)
+        {
+            var user = _userRepository
+                .GetAll()
+                .WhereIf(
+                    !input.Filter.IsNullOrEmpty(),
+                    p => p.Name.Contains(input.Filter) ||
+                        p.EmailAddress.Contains(input.Filter)
+                )
+                .OrderBy(p => p.Name)
 
+                .ToList();
+
+            return new ListResultDto<User>(ObjectMapper.Map<List<User>>(user));
+        }
     }
 
 }

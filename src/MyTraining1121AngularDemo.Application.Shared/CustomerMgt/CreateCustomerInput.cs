@@ -15,5 +15,6 @@ namespace MyTraining1121AngularDemo.CustomerMgt
         public DateTime RegistrationDate { get; set; }
 
         public string Address { get; set; }
+        public long UserRefId { get; set; }
     }
 }

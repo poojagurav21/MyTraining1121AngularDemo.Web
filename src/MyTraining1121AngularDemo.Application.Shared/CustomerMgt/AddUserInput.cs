@@ -1,6 +1,6 @@
 ﻿public class AddUserInput
 {
-    public int CustomerId { get; set; }
-    public long UserId { get; set; }
+    public int CustomerRefId { get; set; }
+    public long UserRefId { get; set; }
     public decimal TotalBillingAmount { get; set; }
 }
