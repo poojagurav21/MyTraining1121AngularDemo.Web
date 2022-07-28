@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace MyTraining1121AngularDemo
 {
-  //  [AbpAuthorize(AppPermissions.Pages_Tenant_Customer)]
+    [AbpAuthorize(AppPermissions.Pages_Tenant_Customer)]
     public class CustomerAppService : MyTraining1121AngularDemoAppServiceBase, ICustomerAppService
     {
         private readonly IRepository<Customer> _customerRepository;
