@@ -16,5 +16,6 @@ namespace MyTraining1121AngularDemo.CustomerMgt
 
         public string Address { get; set; }
         public long UserRefId { get; set; }
+        //list 
     }
 }

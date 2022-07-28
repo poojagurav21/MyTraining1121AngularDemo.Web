@@ -6,16 +6,18 @@ using Abp.Extensions;
 using Microsoft.EntityFrameworkCore;
 using MyTraining1121AngularDemo.Authorization;
 using MyTraining1121AngularDemo.Authorization.Users;
+using MyTraining1121AngularDemo.Authorization.Users.Dto;
 using MyTraining1121AngularDemo.CustomerMgt;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace MyTraining1121AngularDemo
 {
-    [AbpAuthorize(AppPermissions.Pages_Tenant_Customer)]
+  //  [AbpAuthorize(AppPermissions.Pages_Tenant_Customer)]
     public class CustomerAppService : MyTraining1121AngularDemoAppServiceBase, ICustomerAppService
     {
         private readonly IRepository<Customer> _customerRepository;
@@ -59,7 +61,7 @@ namespace MyTraining1121AngularDemo
             var c = input.UserRefId;
             var userId = c;
             var custmerUsers = new CustomerUsers { CustomerRefId = customerId, UserRefId = userId };
-            var s = custmerUsers;
+            //var s = custmerUsers;
             await _customerUserRepository.InsertAsync(custmerUsers);
         }
         [AbpAuthorize(AppPermissions.Pages_Tenant_Customer_DeleteCustomer)]
@@ -129,6 +131,16 @@ namespace MyTraining1121AngularDemo
 
             return new ListResultDto<User>(ObjectMapper.Map<List<User>>(user));
         }
+        public List<UserViewDto> GetUserViewAsync(GetUserCustomerIdDto input)
+        {
+            var customer = _customerUserRepository
+                .GetAll()
+                .Include(u=>u.user)
+                .Where(p=>p.CustomerRefId==input.Id) 
+                .Select(l=>l.user)
+                .ToList();
+            return new List<UserViewDto>( ObjectMapper.Map<List<UserViewDto>>(customer));
+            
+        }
     }
-
 }

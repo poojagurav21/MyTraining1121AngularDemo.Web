@@ -11,3 +11,12 @@ public class CustomerListDto : FullAuditedEntityDto
     public string Address { get; set; }
     public Collection<UserInCustomerListDto> CustUsers { get; set; }
 }
+public class CustomerDto
+{
+    public int Id { get; set; }
+    public string CustomerName { get; set; }
+    public string EmailAddress { get; set; }
+    public DateTime RegistrationDate { get; set; }
+    public string Address { get; set; }
+    public Collection<UserInCustomerListDto> CustUsers { get; set; }
+}
