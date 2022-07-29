@@ -135,12 +135,12 @@ namespace MyTraining1121AngularDemo
         {
             var customer = _customerUserRepository
                 .GetAll()
-                .Include(u=>u.user)
-                .Where(p=>p.CustomerRefId==input.Id) 
-                .Select(l=>l.user)
+                .Include(u => u.user)
+                .Where(p => p.CustomerRefId == input.Id)
+                .Select(l => l.user)
                 .ToList();
-            return new List<UserViewDto>( ObjectMapper.Map<List<UserViewDto>>(customer));
-            
+            return new List<UserViewDto>(ObjectMapper.Map<List<UserViewDto>>(customer));
+
         }
     }
 }

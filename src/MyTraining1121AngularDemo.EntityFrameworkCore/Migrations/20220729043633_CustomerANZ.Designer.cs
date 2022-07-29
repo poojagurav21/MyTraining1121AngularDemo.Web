@@ -12,8 +12,8 @@ using MyTraining1121AngularDemo.EntityFrameworkCore;
 namespace MyTraining1121AngularDemo.Migrations
 {
     [DbContext(typeof(MyTraining1121AngularDemoDbContext))]
-    [Migration("20220723064528_Added_Customers_Table")]
-    partial class Added_Customers_Table
+    [Migration("20220729043633_CustomerANZ")]
+    partial class CustomerANZ
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -1819,9 +1819,44 @@ namespace MyTraining1121AngularDemo.Migrations
                     b.Property<DateTime>("RegistrationDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.ToTable("PbCustomers");
+                });
+
+            modelBuilder.Entity("MyTraining1121AngularDemo.CustomerMgt.CustomerUsers", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("CreatorUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("CustomerRefId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("TotalBillingAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<long>("UserRefId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerRefId");
+
+                    b.HasIndex("UserRefId");
+
+                    b.ToTable("CustomerUsers");
                 });
 
             modelBuilder.Entity("MyTraining1121AngularDemo.Friendships.Friendship", b =>
@@ -2464,6 +2499,25 @@ namespace MyTraining1121AngularDemo.Migrations
                     b.Navigation("LastModifierUser");
                 });
 
+            modelBuilder.Entity("MyTraining1121AngularDemo.CustomerMgt.CustomerUsers", b =>
+                {
+                    b.HasOne("MyTraining1121AngularDemo.CustomerMgt.Customer", "customer")
+                        .WithMany("CustomerUsers")
+                        .HasForeignKey("CustomerRefId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MyTraining1121AngularDemo.Authorization.Users.User", "user")
+                        .WithMany()
+                        .HasForeignKey("UserRefId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("customer");
+
+                    b.Navigation("user");
+                });
+
             modelBuilder.Entity("MyTraining1121AngularDemo.MultiTenancy.Payments.SubscriptionPayment", b =>
                 {
                     b.HasOne("Abp.Application.Editions.Edition", "Edition")
@@ -2584,6 +2638,11 @@ namespace MyTraining1121AngularDemo.Migrations
                     b.Navigation("Settings");
 
                     b.Navigation("Tokens");
+                });
+
+            modelBuilder.Entity("MyTraining1121AngularDemo.CustomerMgt.Customer", b =>
+                {
+                    b.Navigation("CustomerUsers");
                 });
 
             modelBuilder.Entity("MyTraining1121AngularDemo.Phonebook.Person", b =>

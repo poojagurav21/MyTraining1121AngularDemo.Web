@@ -29,12 +29,12 @@ public class InitialCustomerCreator
                     EmailAddress = "douglas.adams@fortytwo.com",
                     RegistrationDate = DateTime.Now,
                     Address="Sawedi,Ahmednagar",
-                    CustomerUsers=new List<CustomerUsers>
+                    CustomerUsers = new List<CustomerUsers>
                     {
                         new CustomerUsers{UserRefId=2,TotalBillingAmount=4554.45M},
-                        
+
                     }
-                  
+
                 });
         }
 
