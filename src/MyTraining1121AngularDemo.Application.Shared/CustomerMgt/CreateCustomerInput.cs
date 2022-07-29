@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace MyTraining1121AngularDemo.CustomerMgt
@@ -15,7 +16,8 @@ namespace MyTraining1121AngularDemo.CustomerMgt
         public DateTime RegistrationDate { get; set; }
 
         public string Address { get; set; }
-        public long UserRefId { get; set; }
-        //list 
+        public List<long> UserRefId { get; set; }
+
+       
     }
 }

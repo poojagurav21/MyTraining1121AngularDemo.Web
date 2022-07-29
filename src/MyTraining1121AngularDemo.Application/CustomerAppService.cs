@@ -51,6 +51,7 @@ namespace MyTraining1121AngularDemo
         public async Task CreateCustomer(CreateCustomerInput input)
         {
             var customer = ObjectMapper.Map<Customer>(input);
+
             await _customerRepository.InsertAndGetIdAsync(customer);
             var allCustomer = await _customerRepository.GetAll().ToListAsync();
             //List<Customer>cust=new List<Customer> { customer };
@@ -60,9 +61,20 @@ namespace MyTraining1121AngularDemo
             var customerId = u;
             var c = input.UserRefId;
             var userId = c;
-            var custmerUsers = new CustomerUsers { CustomerRefId = customerId, UserRefId = userId };
+            foreach (var user in userId)
+            {
+                var custmerUsers = new CustomerUsers
+                {
+                    CustomerRefId = customerId,
+                    //UserRefId = userId
+
+                    UserRefId = user
+                };
+                await _customerUserRepository.InsertAsync(custmerUsers);
+            }
+
             //var s = custmerUsers;
-            await _customerUserRepository.InsertAsync(custmerUsers);
+           // await _customerUserRepository.InsertAsync(custmerUsers);
         }
         [AbpAuthorize(AppPermissions.Pages_Tenant_Customer_DeleteCustomer)]
         public async Task DeleteCustomer(EntityDto input)
