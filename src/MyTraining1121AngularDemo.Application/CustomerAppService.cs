@@ -54,8 +54,6 @@ namespace MyTraining1121AngularDemo
 
             await _customerRepository.InsertAndGetIdAsync(customer);
             var allCustomer = await _customerRepository.GetAll().ToListAsync();
-            //List<Customer>cust=new List<Customer> { customer };
-
             var lastCust = allCustomer.Last();
             var u = lastCust.Id;
             var customerId = u;
@@ -66,15 +64,11 @@ namespace MyTraining1121AngularDemo
                 var custmerUsers = new CustomerUsers
                 {
                     CustomerRefId = customerId,
-                    //UserRefId = userId
-
-                    UserRefId = user
+                    UserRefId = user,
+                    TotalBillingAmount=654.87m
                 };
                 await _customerUserRepository.InsertAsync(custmerUsers);
             }
-
-            //var s = custmerUsers;
-           // await _customerUserRepository.InsertAsync(custmerUsers);
         }
         [AbpAuthorize(AppPermissions.Pages_Tenant_Customer_DeleteCustomer)]
         public async Task DeleteCustomer(EntityDto input)
