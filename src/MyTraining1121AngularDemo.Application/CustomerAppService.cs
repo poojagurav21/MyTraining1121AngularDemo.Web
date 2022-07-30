@@ -69,6 +69,7 @@ namespace MyTraining1121AngularDemo
                 };
                 await _customerUserRepository.InsertAsync(custmerUsers);
             }
+           
         }
         [AbpAuthorize(AppPermissions.Pages_Tenant_Customer_DeleteCustomer)]
         public async Task DeleteCustomer(EntityDto input)
@@ -124,19 +125,16 @@ namespace MyTraining1121AngularDemo
         [AbpAuthorize(AppPermissions.Pages_Tenant_Customer_GetUser)]
         public ListResultDto<User> GetUser(GetUserInput input)
         {
-            var user = _userRepository
-                .GetAll()
-                .WhereIf(
-                    !input.Filter.IsNullOrEmpty(),
-                    p => p.Name.Contains(input.Filter) ||
-                        p.EmailAddress.Contains(input.Filter)
-                )
-                .OrderBy(p => p.Name)
-
-                .ToList();
-
-            return new ListResultDto<User>(ObjectMapper.Map<List<User>>(user));
+            var customerUserId = _customerUserRepository.GetAll()
+               //.Include(c=>c.user)
+               //.Where(i=>i.UserRefId!=use)
+               .Select(c => c.UserRefId);
+           
+            var user2 = _userRepository.GetAll()
+                .Where(p => !customerUserId.Contains(p.Id)).ToList();
+            return new ListResultDto<User>(ObjectMapper.Map<List<User>>(user2));
         }
+      
         public List<UserViewDto> GetUserViewAsync(GetUserCustomerIdDto input)
         {
             var customer = _customerUserRepository

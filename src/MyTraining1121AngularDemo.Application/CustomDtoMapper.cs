@@ -68,7 +68,9 @@ namespace MyTraining1121AngularDemo
             configuration.CreateMap<AddUserInput, CustomerUsers>();
             configuration.CreateMap<UserViewDto, User>().ReverseMap();
             configuration.CreateMap<CustomerDto, Customer>();
-
+            configuration.CreateMap<CustomerUsersDropDownDto, User>().ReverseMap();
+            configuration.CreateMap<CustomerUsers, GetUserInput>().ReverseMap();
+            configuration.CreateMap<CustomerUsers, User>().ReverseMap();
             //Inputs
             configuration.CreateMap<CheckboxInputType, FeatureInputTypeDto>();
             configuration.CreateMap<SingleLineStringInputType, FeatureInputTypeDto>();

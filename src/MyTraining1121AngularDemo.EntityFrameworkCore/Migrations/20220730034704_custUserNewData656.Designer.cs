@@ -12,8 +12,8 @@ using MyTraining1121AngularDemo.EntityFrameworkCore;
 namespace MyTraining1121AngularDemo.Migrations
 {
     [DbContext(typeof(MyTraining1121AngularDemoDbContext))]
-    [Migration("20220729043633_CustomerANZ")]
-    partial class CustomerANZ
+    [Migration("20220730034704_custUserNewData656")]
+    partial class custUserNewData656
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

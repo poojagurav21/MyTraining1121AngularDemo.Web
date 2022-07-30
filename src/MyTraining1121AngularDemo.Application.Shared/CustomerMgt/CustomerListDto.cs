@@ -20,3 +20,9 @@ public class CustomerDto
     public string Address { get; set; }
     public Collection<UserInCustomerListDto> CustUsers { get; set; }
 }
+public class CustomerUsersDropDownDto
+{
+    public long Id { get; set; }
+    public string Name { get; set; }
+    
+}

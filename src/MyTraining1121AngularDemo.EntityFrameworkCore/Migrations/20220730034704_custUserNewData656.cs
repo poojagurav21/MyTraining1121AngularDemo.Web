@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MyTraining1121AngularDemo.Migrations
 {
-    public partial class CustomerANZ : Migration
+    public partial class custUserNewData656 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
