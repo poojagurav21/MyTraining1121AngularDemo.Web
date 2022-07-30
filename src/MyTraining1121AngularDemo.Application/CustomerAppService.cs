@@ -65,11 +65,11 @@ namespace MyTraining1121AngularDemo
                 {
                     CustomerRefId = customerId,
                     UserRefId = user,
-                    TotalBillingAmount=654.87m
+                    TotalBillingAmount = 654.87m
                 };
                 await _customerUserRepository.InsertAsync(custmerUsers);
             }
-           
+
         }
         [AbpAuthorize(AppPermissions.Pages_Tenant_Customer_DeleteCustomer)]
         public async Task DeleteCustomer(EntityDto input)
@@ -91,7 +91,7 @@ namespace MyTraining1121AngularDemo
             customer.EmailAddress = input.EmailAddress;
             customer.RegistrationDate = input.RegistrationDate;
             customer.Address = input.Address;
-            //customer.UserRefId = input.UserRefId;
+
             await _customerRepository.UpdateAsync(customer);
         }
         [AbpAuthorize(AppPermissions.Pages_Tenant_Customer_EditCustomer)]
@@ -126,23 +126,22 @@ namespace MyTraining1121AngularDemo
         public ListResultDto<User> GetUser(GetUserInput input)
         {
             var customerUserId = _customerUserRepository.GetAll()
-               //.Include(c=>c.user)
-               //.Where(i=>i.UserRefId!=use)
-               .Select(c => c.UserRefId);
-           
+                                .Select(c => c.UserRefId);
+
             var user2 = _userRepository.GetAll()
-                .Where(p => !customerUserId.Contains(p.Id)).ToList();
+                        .Where(p => !customerUserId.Contains(p.Id))
+                        .ToList();
             return new ListResultDto<User>(ObjectMapper.Map<List<User>>(user2));
         }
-      
+
         public List<UserViewDto> GetUserViewAsync(GetUserCustomerIdDto input)
         {
             var customer = _customerUserRepository
-                .GetAll()
-                .Include(u => u.user)
-                .Where(p => p.CustomerRefId == input.Id)
-                .Select(l => l.user)
-                .ToList();
+                          .GetAll()
+                          .Include(u => u.user)
+                          .Where(p => p.CustomerRefId == input.Id)
+                          .Select(l => l.user)
+                          .ToList();
             return new List<UserViewDto>(ObjectMapper.Map<List<UserViewDto>>(customer));
 
         }
