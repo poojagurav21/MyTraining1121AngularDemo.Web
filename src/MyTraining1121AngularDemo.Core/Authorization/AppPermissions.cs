@@ -96,6 +96,14 @@
         public const string Pages_Tenant_Customer_DeleteCustomer = "Pages.Tenant.Customer.DeleteCustomer";
         public const string Pages_Tenant_Customer_EditCustomer = "Pages.Tenant.Customer.EditCustomer";
         public const string Pages_Tenant_Customer_GetUser = "Pages.Tenant.Customer.GetCustomer";
+
+
+
+        //todo
+        public const string Pages_Tenant_Todo = "Pages.Tenant.Todo";
+        public const string Pages_Tenant_Todo_CreateTodo = "Pages.Tenant.Todo.CreateTodo";
+        public const string Pages_Tenant_Todo_DeleteTodo = "Pages.Tenant.Todo.DeleteTodo";
+
         //HOST-SPECIFIC PERMISSIONS
 
         public const string Pages_Editions = "Pages.Editions";

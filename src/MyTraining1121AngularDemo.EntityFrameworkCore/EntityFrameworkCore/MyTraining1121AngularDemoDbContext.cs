@@ -14,6 +14,7 @@ using MyTraining1121AngularDemo.MultiTenancy.Payments;
 using MyTraining1121AngularDemo.Storage;
 using MyTraining1121AngularDemo.Phonebook;
 using MyTraining1121AngularDemo.CustomerMgt;
+using MyTraining1121AngularDemo.TodoApplication;
 
 namespace MyTraining1121AngularDemo.EntityFrameworkCore
 {
@@ -23,6 +24,8 @@ namespace MyTraining1121AngularDemo.EntityFrameworkCore
         public virtual DbSet<Phone> Phones { get; set; }
         public virtual DbSet<Customer> Customers { get; set; }
         public virtual DbSet<CustomerUsers> CustomerUsers { get; set; }
+        public virtual DbSet<TodoItem> TodoItems { get; set; }
+
         /* Define an IDbSet for each entity of the application */
 
         public virtual DbSet<BinaryObject> BinaryObjects { get; set; }
@@ -100,7 +103,11 @@ namespace MyTraining1121AngularDemo.EntityFrameworkCore
                 b.HasIndex(e => new { e.TenantId, e.SourceUserId });
                 b.HasIndex(e => new { e.TenantId, e.TargetUserId });
             });
-
+            modelBuilder.Entity<TodoItem>(b =>
+            {
+                b.ToTable("TodoItems");
+            });
+            //modelBuilder.ConfigurePermissionManagement();
             modelBuilder.ConfigurePersistedGrantEntity();
         }
     }
