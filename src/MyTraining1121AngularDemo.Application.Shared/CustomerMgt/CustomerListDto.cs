@@ -9,6 +9,7 @@ public class CustomerListDto : FullAuditedEntityDto
     public string EmailAddress { get; set; }
     public DateTime RegistrationDate { get; set; }
     public string Address { get; set; }
+    public bool Selected { get; set; }
     public Collection<UserInCustomerListDto> CustUsers { get; set; }
 }
 public class CustomerDto

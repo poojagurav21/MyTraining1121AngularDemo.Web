@@ -33,6 +33,13 @@ namespace MyTraining1121AngularDemo
                 Text = todoItem.Text
             };
         }
+        public async Task DeleteMultipleTodoAsync(List<int> Id)
+        {
+            foreach (var id in Id)
+            {
+                await _todoItemRepository.DeleteAsync(id);
+            }
+        }
 
         [AbpAuthorize(AppPermissions.Pages_Tenant_Todo_DeleteTodo)]
 
