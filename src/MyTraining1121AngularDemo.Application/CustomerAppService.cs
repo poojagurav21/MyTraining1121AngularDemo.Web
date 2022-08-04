@@ -47,6 +47,13 @@ public class CustomerAppService : MyTraining1121AngularDemoAppServiceBase, ICust
 
         return new ListResultDto<CustomerListDto>(ObjectMapper.Map<List<CustomerListDto>>(customer));
     }
+    public async Task DeleteMultipleCustomerAsync(List<int> Id)
+    {
+        foreach (var id in Id)
+        {
+            await _customerRepository.DeleteAsync(id);
+        }
+    }
     [AbpAuthorize(AppPermissions.Pages_Tenant_Customer_CreateCustomer)]
     public async Task CreateCustomer(CreateCustomerInput input)
     {
@@ -65,17 +72,19 @@ public class CustomerAppService : MyTraining1121AngularDemoAppServiceBase, ICust
             {
                 CustomerRefId = customerId,
                 UserRefId = user,
-                TotalBillingAmount = 654.87m
+                TotalBillingAmount = 654.87M
             };
             await _customerUserRepository.InsertAsync(custmerUsers);
         }
 
     }
+
     [AbpAuthorize(AppPermissions.Pages_Tenant_Customer_DeleteCustomer)]
     public async Task DeleteCustomer(EntityDto input)
     {
         await _customerRepository.DeleteAsync(input.Id);
     }
+
     [AbpAuthorize(AppPermissions.Pages_Tenant_Customer_EditCustomer)]
     public async Task<GetCustomerForEditOutput> GetCustomerForEdit(GetCustomerForEditInput input)
     {
@@ -111,10 +120,7 @@ public class CustomerAppService : MyTraining1121AngularDemoAppServiceBase, ICust
 
             var user = ObjectMapper.Map<CustomerUsers>(input);
             customer.CustomerUsers.Add(user);
-
-            //Get auto increment Id of the new Phone by saving to database
             await CurrentUnitOfWork.SaveChangesAsync();
-
             return ObjectMapper.Map<UserInCustomerListDto>(user);
         }
         catch
@@ -131,9 +137,9 @@ public class CustomerAppService : MyTraining1121AngularDemoAppServiceBase, ICust
         var user2 = _userRepository.GetAll()
                     .Where(p => !customerUserId.Contains(p.Id))
                     .ToList();
+
         return new ListResultDto<User>(ObjectMapper.Map<List<User>>(user2));
     }
-
     public List<UserViewDto> GetUserViewAsync(GetUserCustomerIdDto input)
     {
         var customer = _customerUserRepository
@@ -142,6 +148,10 @@ public class CustomerAppService : MyTraining1121AngularDemoAppServiceBase, ICust
                       .Where(p => p.CustomerRefId == input.Id)
                       .Select(l => l.user)
                       .ToList();
+
         return new List<UserViewDto>(ObjectMapper.Map<List<UserViewDto>>(customer));
     }
+
 }
+
+
