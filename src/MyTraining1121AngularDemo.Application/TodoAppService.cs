@@ -19,6 +19,7 @@ namespace MyTraining1121AngularDemo
         {
             _todoItemRepository = todoItemRepository;
         }
+
         [AbpAuthorize(AppPermissions.Pages_Tenant_Todo_CreateTodo)]
 
         public async Task<TodoItemDto> CreateAsync(string text)
@@ -52,7 +53,7 @@ namespace MyTraining1121AngularDemo
         {
             var items = await _todoItemRepository.GetAllListAsync();
             return items
-                .OrderBy(c=>c.Text)
+                .OrderBy(c => c.Text)
                 .Select(item => new TodoItemDto
                 {
                     Id = item.Id,

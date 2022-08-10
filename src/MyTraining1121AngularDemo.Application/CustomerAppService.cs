@@ -71,12 +71,11 @@ public class CustomerAppService : MyTraining1121AngularDemoAppServiceBase, ICust
             var custmerUsers = new CustomerUsers
             {
                 CustomerRefId = customerId,
-                UserRefId = user,
+                UserRefId = user,                           
                 TotalBillingAmount = 654.87M
             };
             await _customerUserRepository.InsertAsync(custmerUsers);
         }
-
     }
 
     [AbpAuthorize(AppPermissions.Pages_Tenant_Customer_DeleteCustomer)]
@@ -94,7 +93,7 @@ public class CustomerAppService : MyTraining1121AngularDemoAppServiceBase, ICust
 
     [AbpAuthorize(AppPermissions.Pages_Tenant_Customer_EditCustomer)]
     public async Task EditCustomer(EditCustomerInput input)
-    {
+    { 
         var customer = await _customerRepository.GetAsync(input.Id);
         customer.CustomerName = input.CustomerName;
         customer.EmailAddress = input.EmailAddress;
